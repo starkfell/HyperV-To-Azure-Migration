@@ -140,7 +140,7 @@ powershell_script 'Convert Hyper-V VM to VHD' do
             # Converting the Drive(s) on the VM to VHD and copying them to the Hyper-V Host Network Share.
             $ConvertDrives = New-Object System.Diagnostics.Process
             $ConvertDrives.StartInfo.Filename = "$($TargetVMLocalScriptPath)\\disk2vhd.exe"
-            $ConvertDrives.StartInfo.Arguments = " -c * $($HyperVHostMigrationShare)\\$($ENV:COMPUTERNAME).vhd"
+            $ConvertDrives.StartInfo.Arguments = " -c * $($HyperVHostMigrationShareDriveLetter)\\$($ENV:COMPUTERNAME).vhd"
             $ConvertDrives.EnableRaisingEvents = $true
             $ConvertDrives.StartInfo.UseShellExecute = $false
             $ConvertDrives.Start()
@@ -149,14 +149,14 @@ powershell_script 'Convert Hyper-V VM to VHD' do
              
             If ($ConvertDrives.ExitCode -ne "0") {
                 Write-Host "The Disk to VHD Conversion Process for $($ENV:COMPUTERNAME) did not complete."
-                $NetworkDrive.RemoveNetworkDrive($HyperVHostMigrationShare)
+                $NetworkDrive.RemoveNetworkDrive($HyperVHostMigrationShareDriveLetter)
                 exit 2;
                 }
  
             If ($ConvertDrives.ExitCode -eq "0") {
                 $VMConversionCompleteFile = [System.IO.File]::Create("C:\\MigrateToAzure\\HyperV_VM_to_VHD_Conversion_Complete.txt").Close()
                 Write-Host "The Hyper-V VM to VHD Conversion Process for $($ENV:COMPUTERNAME) Completed Successfully at $($ConvertDrives.ExitTime)."
-                $NetworkDrive.RemoveNetworkDrive($HyperVHostMigrationShare)
+                $NetworkDrive.RemoveNetworkDrive($HyperVHostMigrationShareDriveLetter)
                 exit 0;
                 }           
                  
@@ -165,7 +165,7 @@ powershell_script 'Convert Hyper-V VM to VHD' do
         catch [System.Exception]
             {
                     echo $_.Exception
-                    $NetworkDrive.RemoveNetworkDrive($HyperVHostMigrationShare)
+                    $NetworkDrive.RemoveNetworkDrive($HyperVHostMigrationShareDriveLetter)
                     exit 2;
             }       
         EOH
