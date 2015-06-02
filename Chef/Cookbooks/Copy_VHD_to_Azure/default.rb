@@ -159,7 +159,7 @@ powershell_script 'Copy VHD to Azure' do
 			Write-Host "Attempting to Upload the VHD for $($VMName) to Azure."
 			
 			# Uploading VHD Disk(s) to Azure
-			Add-AzureVhd -LocalFilePath $VHDNetworkPath -Destination $RemoteVHDPath -NumberOfUploaderThreads 5 -OverWrite -EA SilentlyContinue -EV VHDUploadFailed
+			Add-AzureVhd -LocalFilePath $VHDNetworkPath -Destination $RemoteVHDPath -NumberOfUploaderThreads 5 -OverWrite -EA SilentlyContinue -EV VHDUploadFailed | Out-Null
 			
 			if ($VHDUploadFailed)
 				{
@@ -175,17 +175,18 @@ powershell_script 'Copy VHD to Azure' do
 			# Registering Disk in Azure as an OS or Data Disk based upon the Name of the VHD.
 			if ($RemoteVHDFileName -match ".Data(.*)") 
 				{
-					Add-AzureDisk -DiskName $RemoteVHDFileName -MediaLocation $RemoteVHDPath -Label $RemoteVHDFileName
+					Add-AzureDisk -DiskName $RemoteVHDFileName -MediaLocation $RemoteVHDPath -Label $RemoteVHDFileName | Out-Null
 					Write-Host "$($RemoteVHDFileName) was Successfully Registered as a Data Disk in Azure."
 				}
 					
 			if ($RemoteVHDFileName -match "^CHEF(.*)") 
 				{
-					Add-AzureDisk -DiskName $RemoteVHDFileName -MediaLocation $RemoteVHDPath -Label $RemoteVHDFileName -OS "Windows"
+					Add-AzureDisk -DiskName $RemoteVHDFileName -MediaLocation $RemoteVHDPath -Label $RemoteVHDFileName -OS "Windows" | Out-Null
 					Write-Host "$($RemoteVHDFileName) was Successfully Registered as a Windows OS Disk in Azure."
 				}
 
 			Write-Host "$($VMName) has been Successfully copied to Azure."
+			$VHDCopyCompleteFile = [System.IO.File]::Create("C:\\MigrateToAzure\\Copy_VHD_to_Azure_Complete.txt").Close()
 			$NetworkDrive.RemoveNetworkDrive($NetworkDriveLetter)
 			exit 0
 		# [---END---] Try-Catch Wrapper for Entire Script.
