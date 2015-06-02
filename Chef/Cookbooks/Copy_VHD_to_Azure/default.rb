@@ -185,7 +185,7 @@ powershell_script 'Copy VHD to Azure' do
 					Write-Host "$($RemoteVHDFileName) was Successfully Registered as a Windows OS Disk in Azure."
 				}
 
-			Write-Host "$($VMName) has been Successfully copied to Azure."
+			Write-Host "The Converted VHD for $($VMName) has been Successfully copied to Azure."
 			$VHDCopyCompleteFile = [System.IO.File]::Create("C:\\MigrateToAzure\\Copy_VHD_to_Azure_Complete.txt").Close()
 			$NetworkDrive.RemoveNetworkDrive($NetworkDriveLetter)
 			exit 0
