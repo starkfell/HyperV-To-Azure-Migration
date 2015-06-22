@@ -5,13 +5,13 @@
 # Copyright (c) 2015 Ryan Irujo, All Rights Reserved.
 
 # Chef Variables
-secret_key                       = Chef::EncryptedDataBagItem.load_secret("http://[WEB_SERVER_NAME]/encrypted_scvmm_2012R2_data_bag_secret")
+secret_key                       = Chef::EncryptedDataBagItem.load_secret("http://[UBUNTU_WEB_SERVER]/encrypted_scvmm_2012R2_data_bag_secret")
 scvmm_server_name                = "[SCVMM_SERVER_NAME]"
 scvmm_usernames                  = data_bag_item('SCVMM2012R2', 'scvmm_usernames')
 scvmm_passwords                  = Chef::EncryptedDataBagItem.load('SCVMM2012R2', 'scvmm_passwords', secret_key)
 scvmm_console_username           = scvmm_usernames['scvmm_console_username']
 scvmm_console_password           = scvmm_passwords['scvmm_console_password']
-azure_migration_files            = "http://[WEB_SERVER_NAME]/MigrateToAzure.zip"
+azure_migration_files            = "http://[UBUNTU_WEB_SERVER]/MigrateToAzure/MigrateToAzure.zip"
 azure_storage_account            = data_bag_item('Azure','azure_storage_accounts')['[AZURE_STORAGE_ACCOUNT_NAME]]']
 azure_publishsettings_filename   = data_bag_item('Azure','azure_publishsettings_filenames')['[PUBLISHSETTINGS_FILENAME]']
 
