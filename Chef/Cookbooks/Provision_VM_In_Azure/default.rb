@@ -6,7 +6,8 @@
 
 # Chef Variables
 azure_storage_account            = data_bag_item('Azure','azure_storage_accounts')['[AZURE_STORAGE_ACCOUNT_NAME]']
-azure_publishsettings_filename   = data_bag_item('Azure','azure_publishsettings_filenames')['[PUBLISHSETTINGS_FILENAME']
+azure_publishsettings_filename   = data_bag_item('Azure','azure_publishsettings_filenames')['[PUBLISHSETTINGS_FILENAME]']
+azure_subscription_name          = data_bag_item('Azure','azure_subscriptions')['[AZURE_SUBSCRIPTION_NAME]']
 azure_vnet_name                  = data_bag_item('Azure','azure_vnet_names')['[AZURE_VNET_NAME]']
 azure_vm_instance_size           = data_bag_item('Azure','azure_vm_instance_sizes')['Small']
 azure_service_name               = data_bag_item('Azure','azure_service_names')['[AZURE_SERVICE_NAME]']
@@ -18,12 +19,13 @@ powershell_script 'Provision VM In Azure' do
 		try {
 		
 			# Declaring PowerShell Variables.
-			$VMName              = $ENV:COMPUTERNAME
-			$VNetName            = "#{azure_vnet_name}"
-			$VMSize              = "#{azure_vm_instance_size}"
-			$ServiceName         = "#{azure_service_name}"
-			$AzureStorageAccount = "#{azure_storage_account}"
-			$PublishSettingsFile = "#{azure_publishsettings_filename}"
+			$VMName                = $ENV:COMPUTERNAME
+			$VNetName              = "#{azure_vnet_name}"
+			$VMSize                = "#{azure_vm_instance_size}"
+			$ServiceName           = "#{azure_service_name}"
+			$AzureStorageAccount   = "#{azure_storage_account}"
+			$AzureSubscriptionName = "#{azure_subscription_name}"
+			$PublishSettingsFile   = "#{azure_publishsettings_filename}"
 			
 
 			# Verifying that the Windows Azure PowerShell SDK is installed by locating the Microsoft.WindowsAzure.Commands.dll file.
@@ -68,7 +70,7 @@ powershell_script 'Provision VM In Azure' do
 			$SubscriptionID       = $AzurePublishSettings.Id.ToString()
 			
 			# Explicitly choosing the Azure Subscription to Use.
-			$SelectASzureSubscription = Select-AzureSubscription -SubscriptionName "Visual Studio Ultimate with MSDN"
+			$SelectASzureSubscription = Select-AzureSubscription -SubscriptionName $AzureSubscriptionName
 			
 			# Setting the Azure Subscription based upon the Subscription Name and Storage Account.
 			Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccount $AzureStorageAccount
@@ -130,4 +132,3 @@ powershell_script 'Provision VM In Azure' do
 	only_if {File.exists?("C:\\MigrateToAzure\\Copy_VHD_to_Azure_Complete.txt")}
 	not_if {File.exists?("C:\\MigrateToAzure\\Provision_VM_In_Azure_Complete.txt")}
 end
-
