@@ -11,7 +11,7 @@ scvmm_usernames                  = data_bag_item('SCVMM2012R2', 'scvmm_usernames
 scvmm_passwords                  = Chef::EncryptedDataBagItem.load('SCVMM2012R2', 'scvmm_passwords', secret_key)
 scvmm_console_username           = scvmm_usernames['scvmm_console_username']
 scvmm_console_password           = scvmm_passwords['scvmm_console_password']
-azure_migration_files            = "http://[WEB_SERVER_NAME]//MigrateToAzure.zip"
+azure_migration_files            = "http://[WEB_SERVER_NAME]/MigrateToAzure.zip"
 azure_storage_account            = data_bag_item('Azure','azure_storage_accounts')['[AZURE_STORAGE_ACCOUNT_NAME]]']
 azure_publishsettings_filename   = data_bag_item('Azure','azure_publishsettings_filenames')['[PUBLISHSETTINGS_FILENAME]']
 
