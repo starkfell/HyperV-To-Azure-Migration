@@ -70,7 +70,7 @@ powershell_script 'Provision VM In Azure' do
 			$SubscriptionID       = $AzurePublishSettings.Id.ToString()
 			
 			# Explicitly choosing the Azure Subscription to Use.
-			$SelectASzureSubscription = Select-AzureSubscription -SubscriptionName $AzureSubscriptionName
+			$SelectAzureSubscription = Select-AzureSubscription -SubscriptionName $AzureSubscriptionName
 			
 			# Setting the Azure Subscription based upon the Subscription Name and Storage Account.
 			Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccount $AzureStorageAccount
